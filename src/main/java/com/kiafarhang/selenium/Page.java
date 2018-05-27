@@ -31,7 +31,7 @@ abstract class Page {
   String autocompleteTerminal(String string) {
     WebElement commandLineForm = this.driver.findElement(By.tagName("form"));
     WebElement input = commandLineForm.findElement(By.tagName("input"));
-    if (input.getAttribute("value").equals("")) {
+    if (!input.getAttribute("value").equals("")) {
       input.clear();
     }
     input.sendKeys(string);

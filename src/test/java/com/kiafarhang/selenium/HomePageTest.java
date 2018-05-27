@@ -50,20 +50,20 @@ public class HomePageTest {
 
   @Test
   public void loadsHomePage() {
-    HomePage homePage = new HomePage(driver, this.links);
+    MainPage homePage = new MainPage(driver, "/", this.links);
     assertEquals("San Antonio Full-Stack Developer | Kia Farhang", homePage.getTitle());
   }
 
   @Test
   public void homePageContainsCorrectNumberOfLinks() {
-    HomePage homePage = new HomePage(driver, this.links);
+    MainPage homePage = new MainPage(driver, "/", this.links);
     List<WebElement> links = homePage.getLinks();
     assertEquals(3, links.size(), 0);
   }
 
   @Test
   public void testAutoComplete() {
-    HomePage homePage = new HomePage(driver, this.links);
+    MainPage homePage = new MainPage(driver, "/", this.links);
     for (String link: this.links) {
       // Get all but the last character of the link
       String shortenedLink = link.substring(0, link.length() - 2);
