@@ -2,30 +2,16 @@ package com.kiafarhang.selenium;
 
 import static org.junit.Assert.assertEquals;
 
-import io.github.bonigarcia.wdm.WebDriverManager;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
-import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.firefox.FirefoxDriver;
 
-public class PortfolioPageTest {
+public class PortfolioPageTest extends PageTest {
 
-  private static WebDriver driver;
+  private MainPage portfolioPage;
   private List<String> links;
-
-  @BeforeClass
-  public static void setUp() {
-    WebDriverManager.firefoxdriver().setup();
-    driver = new FirefoxDriver();
-    driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
-  }
 
   @Before
   public void createLinks() {
@@ -42,36 +28,23 @@ public class PortfolioPageTest {
     this.links.add("story-template");
     this.links.add("football-bracket");
     this.links.add("tceq-scraper");
-  }
 
-  @After
-  public void cleanUp() {
-    driver.manage().deleteAllCookies();
-  }
-
-  @AfterClass
-  public static void teardown() {
-    if (driver != null) {
-      driver.quit();
-    }
+    this.portfolioPage = new MainPage(this.driver, "/portfolio", this.links);
   }
 
   @Test
   public void loadsPortfolioPage() {
-    MainPage portfolioPage = new MainPage(driver, "/portfolio", this.links);
     assertEquals("San Antonio Full-Stack Developer | Kia Farhang", portfolioPage.getTitle());
   }
 
   @Test
   public void portfolioPageContainsCorrectNumberOfLinks() {
-    MainPage portfolioPage = new MainPage(driver, "/portfolio", this.links);
     List<WebElement> links = portfolioPage.getLinks();
-    assertEquals(12, links.size(), 0);
+    assertEquals(12, this.links.size(), 0);
   }
 
   @Test
   public void testAutoComplete() {
-    MainPage portfolioPage = new MainPage(driver, "/portfolio", this.links);
     for (String link: this.links) {
       // Get all but the last character of the link
       String shortenedLink = link.substring(0, link.length() - 2);
