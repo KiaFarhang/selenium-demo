@@ -60,4 +60,15 @@ public class HomePageTest {
     List<WebElement> links = homePage.getLinks();
     assertEquals(3, links.size(), 0);
   }
+
+  @Test
+  public void testAutoComplete() {
+    HomePage homePage = new HomePage(driver, this.links);
+    for (String link: this.links) {
+      // Get all but the last character of the link
+      String shortenedLink = link.substring(0, link.length() - 2);
+      String autoCompleteResult = homePage.autocompleteTerminal(shortenedLink);
+      assertEquals(link, autoCompleteResult);
+    }
+  }
 }
