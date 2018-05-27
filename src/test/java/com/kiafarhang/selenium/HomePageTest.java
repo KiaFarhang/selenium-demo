@@ -9,20 +9,31 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 import org.junit.After;
 import org.junit.AfterClass;
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
 
-public class FunctionalTest {
+public class HomePageTest {
 
   private static WebDriver driver;
+  private List<String> links;
 
   @BeforeClass
   public static void setUp() {
     WebDriverManager.firefoxdriver().setup();
     driver = new FirefoxDriver();
     driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
+  }
+
+  @Before
+  public void createLinks() {
+    this.links = new ArrayList<String>();
+    this.links.add("about");
+    this.links.add("resume");
+    this.links.add("portfolio");
   }
 
   @After
@@ -39,19 +50,14 @@ public class FunctionalTest {
 
   @Test
   public void loadsHomePage() {
-    HomePage homePage = new HomePage(driver);
+    HomePage homePage = new HomePage(driver, this.links);
     assertEquals("San Antonio Full-Stack Developer | Kia Farhang", homePage.getTitle());
   }
 
   @Test
-  public void homePageContainsCorrectLinks() {
-    HomePage homePage = new HomePage(driver);
-    List<String> links = new ArrayList<String>();
-    links.add("about");
-    links.add("resume");
-    links.add("portfolio");
-
-    assertTrue(homePage.containsLinks(links));
-
+  public void homePageContainsCorrectNumberOfLinks() {
+    HomePage homePage = new HomePage(driver, this.links);
+    List<WebElement> links = homePage.getLinks();
+    assertEquals(3, links.size(), 0);
   }
 }
