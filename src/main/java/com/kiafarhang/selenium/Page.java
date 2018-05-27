@@ -2,45 +2,28 @@ package com.kiafarhang.selenium;
 
 import java.util.List;
 import org.openqa.selenium.By;
-import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
 abstract class Page {
 
   private final WebDriver driver;
-  private String url = "https://kiafarhang.com";
-  private WebElement linkContainer;
+  private String url;
+  private List<WebElement> links;
 
-  Page(WebDriver driver) {
+  Page(WebDriver driver, String relativePath, List<String> links) {
     this.driver = driver;
-    this.setUp();
-  }
-
-  Page(WebDriver driver, String relativePath) {
-    this.driver = driver;
-    this.url = this.url.concat(relativePath);
-    this.setUp();
-  }
-
-  private void setUp() {
+    this.url = "https://kiafarhang.com".concat(relativePath);
     this.driver.get(this.url);
-    this.linkContainer = this.driver.findElement(By.className("link-container"));
+    WebElement linkContainer = this.driver.findElement(By.className("link-container"));
+    this.links = linkContainer.findElements(By.tagName("a"));
   }
 
   String getTitle() {
     return this.driver.getTitle();
   }
 
-  boolean containsLinks(List<String> links) {
-    boolean containsLinks = true;
-    for (String link : links) {
-      try {
-        WebElement linkElement = driver.findElement(By.linkText(link));
-      } catch (NoSuchElementException exception) {
-        containsLinks = false;
-      }
-    }
-    return containsLinks;
+  List<WebElement> getLinks() {
+    return this.links;
   }
 }
